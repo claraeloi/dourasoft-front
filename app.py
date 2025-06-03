@@ -37,10 +37,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Autenticação simples ---
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
+# if "authenticated" not in st.session_state:
+#     st.session_state.authenticated = False
 
-if not st.session_state.authenticated:
+# if not st.session_state.authenticated:
     # Logo centralizada com "Login"
     # logo_path = Path("logo.png")
     # logo_base64 = base64.b64encode(logo_path.read_bytes()).decode()
@@ -52,33 +52,33 @@ if not st.session_state.authenticated:
     #     </div>
     # """, unsafe_allow_html=True)
 
-    username = st.text_input("Usuário")
-    password = st.text_input("Senha", type="password")
-    if st.button("Entrar"):
-        if username == "admin" and password == "4dm1n!A":
-            st.session_state.authenticated = True
-            st.rerun()
-        else:
-            st.error("Credenciais inválidas.")
-    st.stop()
+    # username = st.text_input("Usuário")
+    # password = st.text_input("Senha", type="password")
+    # if st.button("Entrar"):
+    #     if username == "admin" and password == "4dm1n!A":
+    #         st.session_state.authenticated = True
+    #         st.rerun()
+    #     else:
+    #         st.error("Credenciais inválidas.")
+    # st.stop()
 
 # --- Botão de Logout ---
-logout_placeholder = st.empty()
-with logout_placeholder.container():
-    if st.button("🔓 Logout"):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.rerun()
+# logout_placeholder = st.empty()
+# with logout_placeholder.container():
+#     if st.button("🔓 Logout"):
+#         for key in list(st.session_state.keys()):
+#             del st.session_state[key]
+#         st.rerun()
 
 # --- Logo e Título Centralizados ---
-logo_path = Path("logo.png")
-logo_base64 = base64.b64encode(logo_path.read_bytes()).decode()
-st.markdown(f"""
-    <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem;">
-        <img src="data:image/png;base64,{logo_base64}" width="120">
-        <h1 style="color: white; margin-top: 1rem;">Assistente Auto AI</h1>
-    </div>
-""", unsafe_allow_html=True)
+# logo_path = Path("logo.png")
+# logo_base64 = base64.b64encode(logo_path.read_bytes()).decode()
+# st.markdown(f"""
+#     <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem;">
+#         <img src="data:image/png;base64,{logo_base64}" width="120">
+#         <h1 style="color: white; margin-top: 1rem;">Assistente Auto AI</h1>
+#     </div>
+# """, unsafe_allow_html=True)
 
 # --- Chat ---
 if "chat_history" not in st.session_state:
