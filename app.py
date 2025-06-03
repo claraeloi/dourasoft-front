@@ -106,7 +106,7 @@ if user_input:
         with st.spinner("Consultando..."):
             try:
                 response = requests.post(
-                    "https://xbofyqkdl8.execute-api.us-east-1.amazonaws.com/default/query",
+                    "https://japkihqzmd.execute-api.us-east-1.amazonaws.com/query",
                     json={
                         "question": user_input,
                         "chat_history": st.session_state.chat_history
