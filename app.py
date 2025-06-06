@@ -3,7 +3,7 @@ import requests
 from markdown import markdown
 
 # --- Config da página ---
-st.set_page_config(page_title="Auto AI", page_icon="logo.png", layout="wide")
+st.set_page_config(page_title="DouraSoft AI Assistant", page_icon="logo.png", layout="wide")
 
 # --- Estilos customizados ---
 st.markdown("""
