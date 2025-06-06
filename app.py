@@ -30,6 +30,7 @@ for message in st.session_state.chat_history:
 
 # Upload opcional de 1 PDF
 uploaded_file = st.file_uploader("Anexar PDF (opcional)", type="pdf", accept_multiple_files=False)
+file_name = None
 
 # Campo de input
 user_input = st.chat_input("Digite sua pergunta...")
