@@ -80,8 +80,7 @@ if user_input:
 
                 response = requests.post(
                     "https://japkihqzmd.execute-api.us-east-1.amazonaws.com/query",
-                    json=payload,
-                    timeout=90
+                    json=payload
                 )
                 response.raise_for_status()
                 resposta = response.json().get("resposta", "Não consegui gerar uma resposta.")
