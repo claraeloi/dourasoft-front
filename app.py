@@ -1,8 +1,6 @@
 import streamlit as st
 import requests
 from markdown import markdown
-from pathlib import Path
-import base64
 
 # --- Config da página ---
 st.set_page_config(page_title="Auto AI", page_icon="logo.png", layout="wide")
@@ -28,10 +26,10 @@ if "chat_history" not in st.session_state:
 # Mostra o histórico
 for message in st.session_state.chat_history:
     with st.chat_message("user" if message["role"] == "user" else "assistant"):
-        if message["role"] == "user":
-            st.markdown(message["content"])
-        else:
-            st.markdown(markdown(message["content"]), unsafe_allow_html=True)
+        st.markdown(message["content"] if message["role"] == "user" else markdown(message["content"]), unsafe_allow_html=True)
+
+# Upload opcional de 1 PDF
+uploaded_file = st.file_uploader("Anexar PDF (opcional)", type="pdf", accept_multiple_files=False)
 
 # Campo de input
 user_input = st.chat_input("Digite sua pergunta...")
@@ -39,19 +37,49 @@ user_input = st.chat_input("Digite sua pergunta...")
 # Envia a pergunta
 if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
-
+    
     with st.chat_message("user"):
         st.markdown(user_input)
+
+    file_info = None
+    if uploaded_file:
+        try:
+            # Solicita signed URL
+            signed_url_response = requests.post(
+                "https://japkihqzmd.execute-api.us-east-1.amazonaws.com/signed-url",  # ← troque pela sua URL real
+                json={"files": [{"filename": uploaded_file.name, "contentType": "application/pdf"}]}
+            )
+            signed_url_response.raise_for_status()
+            signed = signed_url_response.json()["signedUrls"][0]
+
+            # Faz upload do PDF para a signed URL
+            upload_response = requests.put(
+                signed["url"],
+                data=uploaded_file.read(),
+                headers={"Content-Type": "application/pdf"}
+            )
+            upload_response.raise_for_status()
+
+            # Guarda info do arquivo para mandar à API
+            file_name = signed["filename"]
+
+        except Exception as e:
+            st.error(f"Erro ao fazer upload do PDF: {e}")
+            file_name = None
 
     with st.chat_message("assistant"):
         with st.spinner("Consultando..."):
             try:
+                payload = {
+                    "question": user_input,
+                    "chat_history": st.session_state.chat_history
+                }
+                if file_name:
+                    payload["report_s3_key"] = file_name
+
                 response = requests.post(
                     "https://japkihqzmd.execute-api.us-east-1.amazonaws.com/query",
-                    json={
-                        "question": user_input,
-                        "chat_history": st.session_state.chat_history
-                    },
+                    json=payload,
                     timeout=90
                 )
                 response.raise_for_status()
