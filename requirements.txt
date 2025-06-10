@@ -1,4 +1,4 @@
 markdown
 streamlit
 requests
-jwt
+boto3
