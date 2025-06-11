@@ -390,7 +390,7 @@ else:
 
                     resposta = None
                     polling_url = f"https://japkihqzmd.execute-api.us-east-1.amazonaws.com/result/{task_id}"
-                    polling_timeout = 120
+                    polling_timeout = 150
                     polling_interval = 5
                     start_time = time.time()
 
@@ -398,6 +398,10 @@ else:
                         poll_response = requests.get(polling_url, timeout=10, headers=headers)
                         poll_response.raise_for_status()
                         data = poll_response.json()
+
+                        if data.get("status") == "FAILED":
+                            st.error(f"Houve um erro ao processar a consulta. Por favor, tente novamente.")
+                            break
 
                         if data.get("status") == "FINISHED":
                             resposta = data.get("result")
